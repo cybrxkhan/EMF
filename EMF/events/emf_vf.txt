@@ -719,3 +719,50 @@ letter_event = {
 		}
 	}
 }
+
+
+# emf_vf.100
+# Leadership nomination chain
+#
+# For now, let's just assume that leadership nomination is routed through the liege.
+# We can use the liege as a "handle" to the specific VF instance. Now, it's not entirely
+# clear how the hell we got here, but let's assume for now that if multiple non-AIs need
+# to complete meeting "arrival" or whatever, some other event waits for all of them and
+# only calls this event once.
+#
+# FROM = ? VF liege ?
+# ROOT = referee
+character_event = {
+	id = emf_vf.100
+	desc = AI_EVENT
+	hide_window = yes
+	is_triggered_only = yes
+	
+	option = {
+		name = OK
+		
+		# Merit Scoring
+		FROM = {
+			any_vassal = {
+				limit = {
+					has_character_flag = vf_mtg
+				}
+				set_variable = { which = vf_merit value = 0 }
+				# ...
+			}
+		}
+		
+		# Nomination (merit ranking)
+		# ...
+		
+		# Voting
+		FROM = {
+			any_vassal = {
+				limit = {
+					has_character_flag = vf_mtg
+				}
+				# ...
+			}
+		}
+	}
+}
