@@ -722,6 +722,66 @@ letter_event = {
 
 
 # emf_vf.100
+# VF meeting is called
+#
+# ROOT = liege of some valid VF
+character_event = {
+	id = emf_vf.100
+	desc = HIDE_EVENT
+	hide_window = yes
+
+	only_playable = yes
+	
+	trigger = {
+		higher_real_tier_than = duke
+		
+		# No VF leader or it's been 6 years since the last meeting w/ an election.
+		or = {
+			not = {
+				any_vassal = {
+					# Going to need to track rightful leaders by TOM, because
+					# some leader from another VF could easily end-up vassal
+					# to a different title transiently before a maintenance
+					# event fixed that.
+					trait = vf_leader
+				}
+			}
+			or = {
+				not = { has_character_flag = vf_election_timer }
+				had_character_flag = { flag = vf_election_timer days = 2190 }
+			}
+		}
+		
+		# At least two qualifying vassals for a VF.
+		any_vassal = {
+			higher_tier_than = baron
+			prisoner = no
+			is_adult = yes
+			not = { trait = incapable }
+			count = 2
+		}
+	}
+	
+	option = {
+		name = OK
+		
+		# Everybody's going, and everybody's arrived. Already.
+		any_vassal = {
+			limit = {
+				higher_tier_than = baron
+				prisoner = no
+				is_adult = yes
+				not = { trait = incapable }
+			}
+			set_character_flag = vf_mtg
+		}
+		
+		e_hip = { owner = { character_event = { id = emf_vf.101 } } }
+	}
+}
+
+
+# emf_vf.101
 # Leadership nomination chain
 #
 # For now, let's just assume that leadership nomination is routed through the liege.
@@ -733,7 +793,7 @@ letter_event = {
 # FROM = ? VF liege ?
 # ROOT = referee
 character_event = {
-	id = emf_vf.100
+	id = emf_vf.101
 	desc = AI_EVENT
 	hide_window = yes
 	is_triggered_only = yes
