@@ -733,19 +733,20 @@ character_event = {
 	only_playable = yes
 	
 	trigger = {
+		always = no
 		higher_real_tier_than = duke
 		
 		# No VF leader or it's been 6 years since the last meeting w/ an election.
 		or = {
-			not = {
-				any_vassal = {
+#			not = {
+#				any_vassal = {
 					# Going to need to track rightful leaders by TOM, because
 					# some leader from another VF could easily end-up vassal
 					# to a different title transiently before a maintenance
 					# event fixed that.
-					trait = vf_leader
-				}
-			}
+#					trait = vf_leader
+#				}
+#			}
 			or = {
 				not = { has_character_flag = vf_election_timer }
 				had_character_flag = { flag = vf_election_timer days = 2190 }
@@ -776,7 +777,8 @@ character_event = {
 			set_character_flag = vf_mtg
 		}
 		
-		e_hip = { owner = { character_event = { id = emf_vf.101 } } }
+		#e_hip = { owner = { character_event = { id = emf_vf.101 } } }
+		character_event = { id = emf_vf.101 }
 	}
 }
 
@@ -794,35 +796,77 @@ character_event = {
 # ROOT = referee
 character_event = {
 	id = emf_vf.101
-	desc = AI_EVENT
-	hide_window = yes
+#	desc = AI_EVENT
+	desc = "Merit scoring: Calculate realm size proportion (I)."
+#	hide_window = yes
 	is_triggered_only = yes
 	
 	option = {
 		name = OK
 		
 		# Merit Scoring
-		FROM = {
-			any_vassal = {
-				limit = {
-					has_character_flag = vf_mtg
-				}
-				set_variable = { which = vf_merit value = 0 }
-				# ...
-			}
+		any_vassal = {
+			limit = { has_character_flag = vf_mtg }
+			set_variable = { which = vf_merit value = 0 }
 		}
 		
-		# Nomination (merit ranking)
-		# ...
+		# If rulers somehow don't have rsz_idx, get one...
+		if = {
+			limit = { not = { check_variable = { which = rsz_idx value = 1 } } }
+			character_event = { id = emf_dynlevy.20 }
+		}
 		
-		# Voting
-		FROM = {
-			any_vassal = {
-				limit = {
-					has_character_flag = vf_mtg
-				}
-				# ...
+		any_vassal = {
+			limit = {
+				has_character_flag = vf_mtg
+				not = { check_variable = { which = rsz_idx value = 1 } }
 			}
+			character_event = { id = emf_dynlevy.20 }
+		}
+		
+		character_event = { id = emf_vf.102 }
+	}
+}
+
+
+character_event = {
+	id = emf_vf.102
+#	desc = AI_EVENT
+	desc = "Merit scoring: Calculate realm size proportion (II)."
+#	hide_window = yes
+	is_triggered_only = yes
+	
+	option = {
+		name = OK
+		
+		# Realm size proportion
+		any_vassal = {
+			limit = { has_character_flag = vf_mtg }
+			change_variable = { which = rsz_idx_tmp which = rsz_idx } # Save real rsz_idx
+			divide_variable = { which = rsz_idx which = ROOT } # Divide rsz_idx by liege's
+		}
+		
+		character_event = { id = emf_vf.103 }
+	}
+}
+
+
+character_event = {
+	id = emf_vf.103
+#	desc = AI_EVENT
+	desc = "Merit scoring: Calculate realm size proportion (III)."
+#	hide_window = yes
+	is_triggered_only = yes
+	
+	option = {
+		name = OK
+		
+		any_vassal = {
+			limit = { has_character_flag = vf_mtg }
+			change_variable = { which = vf_merit which = rsz_idx } # Add to vf_merit
+			set_variable = { which = rsz_idx value = 0 }
+			change_variable = { which = rsz_idx which = rsz_idx_tmp } # Put old rsz_idx back into place
+			set_variable = { which = rsz_idx_tmp value = 0 }
 		}
 	}
 }
