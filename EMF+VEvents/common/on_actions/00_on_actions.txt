@@ -576,6 +576,10 @@ on_yearly_pulse = {
 		100 = VIETmisc.2280
 		100 = VIETmisc.2281
 		100 = VIETmisc.2284
+		#Animals
+		100 = VIETmisc.2293
+		100 = VIETmisc.2296
+		100 = VIETmisc.2306
 		
 		#VIET CULTURE SPECIFIC EVENTS
 		#African
@@ -1011,6 +1015,12 @@ on_bi_yearly_pulse = {
 		10 = VIETmisc.2290
 		10 = VIETmisc.2291
 		10 = VIETmisc.2292
+		#Animals
+		10 = VIETmisc.2297
+		10 = VIETmisc.2298
+		10 = VIETmisc.2304
+		10 = VIETmisc.2305
+		10 = VIETmisc.2307
 		
 		#CVLTVRE-SPECIFIC
 		#Turkish
@@ -1234,6 +1244,12 @@ on_five_year_pulse = {
 		10 = VIETmisc.2285
 		10 = VIETmisc.2286
 		10 = VIETmisc.2287
+		#Animals
+		10 = VIETmisc.2294
+		10 = VIETmisc.2299
+		10 = VIETmisc.2300
+		10 = VIETmisc.2302
+		10 = VIETmisc.2303
 		
 		#VIET Event Chains
 		2 = VIETmisc.2513 #Call on the avatar
